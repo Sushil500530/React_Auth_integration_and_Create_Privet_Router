@@ -1,13 +1,20 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import PropTypes from 'prop-types';
+import auth from "../../components/firebase/firebase.confiq";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 
 export const AuthContex = createContext(null)
 
 const AuthProvider = ({children}) => {
-    const authInfo = {
-        name:'nodi sagor khal bill'
+    const [user,setUser] = useState(null) ;
+     
+
+    const createUser = (email,password) =>{
+        return createUserWithEmailAndPassword(auth,email,password)
     }
+
+    const authInfo = {user,createUser} // createUser dewar main karon hocche j kono jayga theke j kew access korte parbe...
     return (
         <AuthContex.Provider value={authInfo}>
             {children}

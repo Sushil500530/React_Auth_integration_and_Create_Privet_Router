@@ -1,13 +1,28 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContex } from "../../providers/authProvder/AuthProvider";
 
 const Resister = () => {
+
+    const {createUser} = useContext(AuthContex)
+
     const handleResisterSubmit = (e) => {
         e.preventDefault() ;
         const name = e.target.name.value ;
         const email = e.target.email.value ;
         const password = e.target.password.value ;
-        console.log(name,email,password);
+        // console.log(name,email,password);
        
+        
+         //create user in firebase
+        
+         createUser(email,password)
+         .then(result =>{
+            console.log(result.user);
+         })
+        .catch(error =>{
+            console.error(error);
+        })
     }
     return (
         <div>
