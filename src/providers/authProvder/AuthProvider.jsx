@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import auth from "../../components/firebase/firebase.confiq";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 
 export const AuthContex = createContext(null)
@@ -18,19 +18,29 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password)
     }
 
-    useEffect(()=>{ //logout na howa porjonta ai state ta dhore rakhtece
-       const unSubscribe =  onAuthStateChanged(auth,currentUser=>{
-            if(currentUser){
-                setUser(currentUser)
-                console.log('observing current user inside useEffect of AuthProvider', currentUser);
-            }
+
+    const logOut = () =>{
+       return signOut(auth) ;
+    }
+
+    // observe of state changes
+    useEffect(() => { //logout na howa porjonta ai state ta dhore rakhtece
+        const unSubscribe = onAuthStateChanged(auth, currentUser => {
+            console.log('current value of the current user', currentUser);
+            setUser(currentUser) ;
+            // if (currentUser) {
+            //     setUser(currentUser)
+            //     console.log('observing current user inside useEffect of AuthProvider', currentUser);
+            // }
         })
-        return()=>{
+        return () => {
             unSubscribe()
         }
-    },[])
+    }, [])
 
-    const authInfo = { user, createUser, signInUser } // createUser dewar main karon hocche j kono jayga theke j kew access korte parbe...
+
+ // createUser dewar main karon hocche j kono jayga theke j kew access korte parbe...
+    const authInfo = { user,createUser,signInUser,logOut}
     return (
         <AuthContex.Provider value={authInfo}>
             {children}
