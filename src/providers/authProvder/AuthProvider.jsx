@@ -8,18 +8,22 @@ export const AuthContex = createContext(null)
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading,setLoading] = useState(true);
 
 
     const createUser = (email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password)
+        setLoading(true) ; //reload er smoy khuje pay na bole ata declare kora hoyeche....
+        return createUserWithEmailAndPassword(auth, email, password) ;
     }
 
     const signInUser = (email, password) => {
-        return signInWithEmailAndPassword(auth, email, password)
+        setLoading(true);
+        return signInWithEmailAndPassword(auth, email, password) ;
     }
 
 
     const logOut = () =>{
+        setLoading(true) ;
        return signOut(auth) ;
     }
 
@@ -27,6 +31,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => { //logout na howa porjonta ai state ta dhore rakhtece
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
             console.log('current value of the current user', currentUser);
+            setLoading(false);
             setUser(currentUser) ;
             // if (currentUser) {
             //     setUser(currentUser)
@@ -40,7 +45,7 @@ const AuthProvider = ({ children }) => {
 
 
  // createUser dewar main karon hocche j kono jayga theke j kew access korte parbe...
-    const authInfo = { user,createUser,signInUser,logOut}
+    const authInfo = {loading, user,createUser,signInUser,logOut}
     return (
         <AuthContex.Provider value={authInfo}>
             {children}
