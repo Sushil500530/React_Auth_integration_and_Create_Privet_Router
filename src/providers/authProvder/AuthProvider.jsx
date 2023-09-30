@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import auth from "../../components/firebase/firebase.confiq";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 
 
-export const AuthContex = createContext(null)
+export const AuthContex = createContext(null) ;
+
+const googleProvider = new GoogleAuthProvider()
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -21,6 +23,10 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password) ;
     }
 
+    const signInWithGoogle = () =>{
+        setLoading(true)
+        return signInWithPopup(auth,googleProvider)
+    }
 
     const logOut = () =>{
         setLoading(true) ;
@@ -45,7 +51,7 @@ const AuthProvider = ({ children }) => {
 
 
  // createUser dewar main karon hocche j kono jayga theke j kew access korte parbe...
-    const authInfo = {loading, user,createUser,signInUser,logOut}
+    const authInfo = {loading, user,createUser,signInUser,logOut,signInWithGoogle}
     return (
         <AuthContex.Provider value={authInfo}>
             {children}

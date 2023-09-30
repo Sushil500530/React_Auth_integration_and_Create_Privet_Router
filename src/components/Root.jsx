@@ -7,6 +7,7 @@ import About from './about/About';
 import SubHome from './Home/SubHome';
 import Orders from './orders/Orders';
 import PrivetRouts from '../Routes/PrivetRouts';
+import Profile from './profile/Profile';
 
 const Root = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ const Root = createBrowserRouter([
             {
                 path:'/orders',
                 element: <PrivetRouts><Orders></Orders></PrivetRouts>
+            },
+            {
+                path:'/profile',
+                element: <PrivetRouts><Profile></Profile></PrivetRouts>
             }
         ]
     }
